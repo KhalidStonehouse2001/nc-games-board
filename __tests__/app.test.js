@@ -4,3 +4,7 @@ const seed = require('../db/seeds/seed.js');
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
+
+describe('Testing 1, 2, 3', () => {
+	test('Test', () => {});
+});
