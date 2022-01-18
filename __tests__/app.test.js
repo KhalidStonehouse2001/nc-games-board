@@ -237,3 +237,49 @@ describe('PATCH - /api/reviews/:review_id', () => {
 			});
 	});
 });
+
+describe('GET - /api/reviews', () => {
+	test('status 200: returns an array of objects containing all the reviews with their correct key value pairs', () => {
+		return request(app)
+			.get('/api/reviews')
+			.expect(200)
+			.then(({ body: { reviews } }) => {
+				expect(reviews).toHaveLength(13);
+				expect(reviews).toBeInstanceOf(Array);
+				reviews.forEach((review) => {
+					expect(review).toHaveProperty('comment_count');
+					expect(review).toMatchObject({
+						owner: expect.any(String),
+						title: expect.any(String),
+						review_id: expect.any(Number),
+						review_body: expect.any(String),
+						designer: expect.any(String),
+						review_img_url: expect.any(String),
+						category: expect.any(String),
+						created_at: expect.any(String),
+						votes: expect.any(Number),
+					});
+				});
+			});
+	});
+	test('status 200: returns an array of reviews to be sorted by created_at in descending order', () => {
+		return request(app)
+			.get('/api/reviews')
+			.expect(200)
+			.then(({ body: { reviews } }) => {
+				expect(reviews).toBeSortedBy('created_at', { descending: true });
+			});
+	});
+	test('status 200: returns and array of reviews with a following query', () => {
+		return request(app)
+			.get('/api/reviews?sort_by=votes')
+			.expect(200)
+			.then(({ body: { reviews } }) => {
+				expect(reviews).toBeSortedBy('votes', { descending: true });
+			});
+	});
+});
+
+describe('GET - /api/reviews/:review_id/comments', () => {});
+
+describe('POST /api/reviews:review_id/comments', () => {});

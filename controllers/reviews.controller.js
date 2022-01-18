@@ -30,3 +30,12 @@ exports.patchReviews = (req, res, next) => {
 		})
 		.catch(next);
 };
+
+exports.getReviews = (req, res, next) => {
+	const sortBy = req.query.sort_by;
+	selectReviews(sortBy, 'DESC')
+		.then((reviews) => {
+			res.status(200).send({ reviews });
+		})
+		.catch(next);
+};
