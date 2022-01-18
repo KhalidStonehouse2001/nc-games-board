@@ -109,7 +109,7 @@ const seed = (data) => {
 						return db.query(queryStr);
 					})
 					.then((res) => {
-						// console.log(res.rows);
+						// console.log(res.rows.length);
 					})
 			);
 		});
