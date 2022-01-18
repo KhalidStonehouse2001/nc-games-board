@@ -1,5 +1,5 @@
 exports.handle404s = (req, res) => {
-	res.status(404).send({ msg: 'Not Found' });
+	res.status(404).send({ msg: 'Page Not Found' });
 };
 
 exports.handlePsqlErrors = (err, req, res, next) => {

@@ -1,11 +1,9 @@
-const { selectReviews, selectReviewsById } = require('../models/reviews.model');
+const {
+	selectReviews,
+	selectReviewsById,
+	updateReviews,
+} = require('../models/reviews.model');
 const { checkIfReviewExists } = require('../utils/utils');
-
-exports.getReviews = (req, res, next) => {
-	selectReviews().then((reviews) => {
-		res.status(200).send({ reviews });
-	});
-};
 
 exports.getReviewByID = (req, res, next) => {
 	const { review_id } = req.params;
@@ -19,6 +17,16 @@ exports.getReviewByID = (req, res, next) => {
 			} else {
 				return Promise.reject({ status: 404, msg: 'Not Found' });
 			}
+		})
+		.catch(next);
+};
+
+exports.patchReviews = (req, res, next) => {
+	const { inc_votes } = req.body;
+	const { review_id } = req.params;
+	updateReviews(review_id, inc_votes)
+		.then((review) => {
+			res.status(201).send({ review });
 		})
 		.catch(next);
 };

@@ -7,6 +7,17 @@ const app = require('../app');
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
+describe('GET - /api', () => {
+	test('status 200: returns with a JSON object containing all the information of the possible endpoints', () => {
+		return request(app)
+			.get('/api')
+			.expect(200)
+			.then(({ body }) => {
+				expect(body).toEqual(require('../endpoints.json'));
+			});
+	});
+});
+
 describe('GET /api/categories', () => {
 	test('status 200: returns an array on category objects', () => {
 		return request(app)
@@ -22,12 +33,12 @@ describe('GET /api/categories', () => {
 				});
 			});
 	});
-	test('GET - 404: returns with an error message if given incorrect path', () => {
+	test('status 404: returns with an error message if given incorrect path', () => {
 		return request(app)
 			.get('/hello123')
 			.expect(404)
 			.then((res) => {
-				expect(res.body.msg).toBe('Not Found');
+				expect(res.body.msg).toBe('Page Not Found');
 			});
 	});
 });
@@ -61,12 +72,12 @@ describe('GET /api/comments', () => {
 				});
 			});
 	});
-	test('404: returns not found if path is entered incorrectly', () => {
+	test('status 404: returns not found if path is entered incorrectly', () => {
 		return request(app)
 			.get('/api/commento')
 			.expect(404)
 			.then(({ body: { msg } }) => {
-				expect(msg).toBe('Not Found');
+				expect(msg).toBe('Page Not Found');
 			});
 	});
 });
@@ -102,6 +113,38 @@ describe('GET /api/comments/:comment_id', () => {
 			.expect(404)
 			.then(({ body: { msg } }) => {
 				expect(msg).toBe('Not Found');
+			});
+	});
+});
+
+describe('DELETE /api/comments/:comment_id', () => {
+	test('status 204 deletes the comment and returns with no content ', () => {
+		return request(app)
+			.delete('/api/comments/1')
+			.expect(204)
+			.then(() => {
+				return request(app)
+					.delete('/api/comments/1')
+					.expect(404)
+					.then(({ body: { msg } }) => {
+						expect(msg).toEqual('Comment not found');
+					});
+			});
+	});
+	test('status 400: returns bad request when given an invalid id', () => {
+		return request(app)
+			.delete('/api/comments/hello')
+			.expect(400)
+			.then(({ body: { msg } }) => {
+				expect(msg).toBe('Bad Request');
+			});
+	});
+	test('status 404, returns not found if given a id that doesnt exist', () => {
+		return request(app)
+			.delete('/api/comments/900')
+			.expect(404)
+			.then(({ body: { msg } }) => {
+				expect(msg).toBe('Comment not found');
 			});
 	});
 });
@@ -145,25 +188,52 @@ describe('GET /api/reviews/:review_id', () => {
 	});
 });
 
-describe('GET - /api/reviews', () => {
-	test('status 200: returns an array of objects of reviews with the correct key-value pairs', () => {
+describe('PATCH - /api/reviews/:review_id', () => {
+	test('status 201: returns the updated review with the votes incremented based on request', () => {
 		return request(app)
-			.get('/api/reviews')
-			.expect(200)
-			.then(({ body: { reviews } }) => {
-				expect(reviews).toHaveLength(13);
-				reviews.forEach((review) => {
-					expect(review).toHaveProperty('comment_count');
-					expect(review).toMatchObject({
-						owner: expect.any(String),
-						title: expect.any(String),
-						review_id: expect.any(Number),
-						category: expect.any(String),
-						review_img_url: expect.any(String),
-						created_at: expect.any(String),
-						votes: expect.any(Number),
-					});
-				});
+			.patch('/api/reviews/1')
+			.send({ inc_votes: 1 })
+			.expect(201)
+			.then(({ body: { review } }) => {
+				expect(review).toBeInstanceOf(Object);
+				expect(review.votes).toBe(2);
+			});
+	});
+	test('status 201: returns the updated review when votes are decremented based on request', () => {
+		return request(app)
+			.patch('/api/reviews/1')
+			.send({ inc_votes: -100 })
+			.expect(201)
+			.then(({ body: { review } }) => {
+				expect(review).toBeInstanceOf(Object);
+				expect(review.votes).toBe(-99);
+			});
+	});
+	test('status 400: returns bad request when given invalid id ', () => {
+		return request(app)
+			.patch('/api/reviews/banana')
+			.send({ helloMate: 'Bye' })
+			.expect(400)
+			.then(({ body: { msg } }) => {
+				expect(msg).toBe('Bad Request');
+			});
+	});
+	test('status 404: returns not found when given id that does not exist', () => {
+		return request(app)
+			.patch('/api/reviews/900')
+			.send({ inc_votes: 90 })
+			.expect(404)
+			.then(({ body: { msg } }) => {
+				expect(msg).toBe('Id Invalid - Not found');
+			});
+	});
+	test('status 404: returns not found when path is incorrect', () => {
+		return request(app)
+			.patch('/apu/reviews/2')
+			.send({ inc_votes: 1 })
+			.expect(404)
+			.then(({ body: { msg } }) => {
+				expect(msg).toBe('Page Not Found');
 			});
 	});
 });

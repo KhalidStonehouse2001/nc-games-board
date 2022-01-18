@@ -1,6 +1,7 @@
 const {
 	selectComments,
 	selectCommentById,
+	eraseComments,
 } = require('../models/comments.model');
 const { checkIfIdExists } = require('../utils/utils');
 
@@ -22,6 +23,15 @@ exports.getCommentById = (req, res, next) => {
 			} else {
 				return Promise.reject({ status: 404, msg: 'Not Found' });
 			}
+		})
+		.catch(next);
+};
+
+exports.deleteComment = (req, res, next) => {
+	const { comment_id } = req.params;
+	eraseComments(comment_id)
+		.then((msg) => {
+			res.status(204).send();
 		})
 		.catch(next);
 };
