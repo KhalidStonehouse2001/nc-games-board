@@ -30,3 +30,11 @@ exports.eraseComments = (id) => {
 			return deletedComment;
 		});
 };
+
+exports.selectCommentsByReviewId = (id) => {
+	return db
+		.query(`SELECT * FROM comments WHERE review_id = $1`, [id])
+		.then(({ rows }) => {
+			return rows;
+		});
+};

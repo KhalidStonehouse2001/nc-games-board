@@ -2,6 +2,7 @@ const {
 	selectComments,
 	selectCommentById,
 	eraseComments,
+	selectCommentsByReviewId,
 } = require('../models/comments.model');
 const { checkIfIdExists } = require('../utils/utils');
 
@@ -32,6 +33,18 @@ exports.deleteComment = (req, res, next) => {
 	eraseComments(comment_id)
 		.then((msg) => {
 			res.status(204).send();
+		})
+		.catch(next);
+};
+
+exports.getCommentsByReviewId = (req, res, next) => {
+	const { review_id } = req.params;
+	if (isNaN(review_id)) {
+		res.status(400).send({ msg: 'Bad request' });
+	}
+	selectCommentsByReviewId(review_id)
+		.then((comments) => {
+			res.status(200).send({ comments });
 		})
 		.catch(next);
 };
