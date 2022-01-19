@@ -296,6 +296,30 @@ describe('GET - /api/reviews', () => {
 				});
 			});
 	});
+	test('status 400: returns bad request when passed an invalid sort_by query', () => {
+		return request(app)
+			.get('/api/reviews?sort_by=hellomate')
+			.expect(400)
+			.then(({ body: { msg } }) => {
+				expect(msg).toBe('Bad request, invalid input');
+			});
+	});
+	test('status 400: returns bad request when passed an invalid order query ', () => {
+		return request(app)
+			.get('/api/reviews?sort_by=votes&order=helloboss')
+			.expect(400)
+			.then(({ body: { msg } }) => {
+				expect(msg).toBe('Bad request, invalid input');
+			});
+	});
+	test('status 404: returns not found if given incorrect path', () => {
+		return request(app)
+			.get('/api/revews')
+			.expect(404)
+			.then(({ body: { msg } }) => {
+				expect(msg).toBe('Page Not Found');
+			});
+	});
 });
 
 describe('GET - /api/reviews/:review_id/comments', () => {});

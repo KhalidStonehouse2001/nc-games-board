@@ -57,16 +57,14 @@ exports.selectReviews = (sort_by = 'created_at', order = 'DESC', category) => {
 		});
 	}
 
-	let queryStr = `SELECT reviews.*, COUNT(comments.comment_id)::INT AS comment_count FROM reviews LEFT JOIN comments ON reviews.review_id = comments.review_id GROUP BY reviews.review_id`;
+	let queryStr = `SELECT reviews.*, COUNT(comments.comment_id) AS comment_count FROM reviews LEFT JOIN comments ON reviews.review_id = comments.review_id`;
 
 	if (category) {
 		queryStr += ` WHERE reviews.category = '${category}'`;
 	}
 
-	queryStr += ` ORDER BY ${sort_by} ${order}`;
-	console.log(queryStr);
+	queryStr += ` GROUP BY reviews.review_id ORDER BY ${sort_by} ${order}`;
 	return db.query(queryStr).then(({ rows }) => {
-		console.log(rows);
 		return rows;
 	});
 };
