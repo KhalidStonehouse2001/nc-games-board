@@ -1,3 +1,4 @@
+const { request } = require('express');
 const {
 	selectReviews,
 	selectReviewsById,
@@ -32,8 +33,8 @@ exports.patchReviews = (req, res, next) => {
 };
 
 exports.getReviews = (req, res, next) => {
-	const sortBy = req.query.sort_by;
-	selectReviews(sortBy, 'DESC')
+	const { sort_by, order, category } = req.query;
+	selectReviews(sort_by, order, category)
 		.then((reviews) => {
 			res.status(200).send({ reviews });
 		})

@@ -28,7 +28,7 @@ exports.updateReviews = (id, body) => {
 		});
 };
 
-exports.selectReviews = (sortQuery, orderQuery, categoryQuery) => {
+exports.selectReviews = (sort_by = 'created_at', order = 'DESC', category) => {
 	const allowedSortBys = [
 		'owner',
 		'title',
@@ -41,34 +41,32 @@ exports.selectReviews = (sortQuery, orderQuery, categoryQuery) => {
 
 	const allowedOrder = ['ASC', 'DESC', 'asc', 'desc'];
 
-	if (sortQuery === undefined || orderQuery === undefined) {
-		sortQuery = 'created_at';
-		orderQuery = 'DESC';
-	} else if (sortQuery === undefined) {
-		sortQuery = 'created_at';
-	} else if (orderQuery === undefined) {
-		orderQuery = 'DESC';
+	if (sort_by === undefined || order === undefined) {
+		sort_by = 'created_at';
+		order = 'DESC';
+	} else if (sort_by === undefined) {
+		sort_by = 'created_at';
+	} else if (order === undefined) {
+		order = 'DESC';
 	}
 
-	if (
-		!allowedSortBys.includes(sortQuery) ||
-		!allowedOrder.includes(orderQuery)
-	) {
+	if (!allowedSortBys.includes(sort_by) || !allowedOrder.includes(order)) {
 		return Promise.reject({
 			status: 400,
 			msg: 'Bad request, invalid input',
 		});
 	}
-	return db
-		.query(
-			`
-			SELECT reviews.review_id, reviews.title, reviews.designer, reviews.review_img_url, reviews.owner, reviews.review_body, reviews.category, reviews.created_at, reviews.votes, COUNT(comments.comment_id) AS comment_count FROM reviews
-                    FULL JOIN comments
-                    ON reviews.review_id = comments.review_id
-                    GROUP BY reviews.review_id
-                    ORDER BY ${sortQuery} ${orderQuery}`
-		)
-		.then(({ rows }) => {
-			return rows;
-		});
+
+	let queryStr = `SELECT reviews.*, COUNT(comments.comment_id)::INT AS comment_count FROM reviews LEFT JOIN comments ON reviews.review_id = comments.review_id GROUP BY reviews.review_id`;
+
+	if (category) {
+		queryStr += ` WHERE reviews.category = '${category}'`;
+	}
+
+	queryStr += ` ORDER BY ${sort_by} ${order}`;
+	console.log(queryStr);
+	return db.query(queryStr).then(({ rows }) => {
+		console.log(rows);
+		return rows;
+	});
 };

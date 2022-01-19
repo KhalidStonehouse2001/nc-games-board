@@ -270,12 +270,30 @@ describe('GET - /api/reviews', () => {
 				expect(reviews).toBeSortedBy('created_at', { descending: true });
 			});
 	});
-	test('status 200: returns and array of reviews with a following query', () => {
+	test('status 200: returns an array of reviews sorted by votes in descending order', () => {
 		return request(app)
-			.get('/api/reviews?sort_by=votes')
+			.get('/api/reviews?sort_by=votes&order=desc')
 			.expect(200)
 			.then(({ body: { reviews } }) => {
 				expect(reviews).toBeSortedBy('votes', { descending: true });
+			});
+	});
+	test('status 200: returns an array of reviews sorted by review_id in ascending order', () => {
+		return request(app)
+			.get('/api/reviews?sort_by=review_id&order=asc')
+			.expect(200)
+			.then(({ body: { reviews } }) => {
+				expect(reviews).toBeSortedBy('review_id', { ascending: true });
+			});
+	});
+	test('status 200: returns array of reviews sorted by category', () => {
+		return request(app)
+			.get('/api/reviews?category=dexterity')
+			.expect(200)
+			.then(({ body: { reviews } }) => {
+				reviews.forEach((review) => {
+					expect(review.category).toBe('dexterity');
+				});
 			});
 	});
 });
