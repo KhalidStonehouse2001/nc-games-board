@@ -30,3 +30,5 @@ exports.checkIfReviewExists = (id) => {
 			}
 		});
 };
+
+exports.checkIfUserExists = (username) => {};

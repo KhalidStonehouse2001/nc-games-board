@@ -20,6 +20,10 @@ const {
 	handleCustomErrors,
 } = require('./Error-Handling/error');
 const { getApi } = require('./controllers/api.controllers');
+const {
+	getUsers,
+	getUserByUsername,
+} = require('./controllers/users.controllers');
 const app = express();
 
 app.use(express.json());
@@ -33,6 +37,8 @@ app.get('/api/comments', getComments);
 app.get('/api/comments/:comment_id', getCommentById);
 app.delete('/api/comments/:comment_id', deleteComment);
 app.post('/api/reviews/:review_id/comments', postComment);
+app.get('/api/users', getUsers);
+app.get('/api/users/:username', getUserByUsername);
 app.all('*', handle404s);
 app.use(handlePsqlErrors);
 app.use(handleCustomErrors);

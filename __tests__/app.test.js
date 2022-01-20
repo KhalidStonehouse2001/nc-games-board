@@ -445,3 +445,42 @@ describe('POST /api/reviews/:review_id/comments', () => {
 			});
 	});
 });
+
+describe('GET - /api/users', () => {
+	test('status 200: returns an array of objects with the key of username and its value', () => {
+		return request(app)
+			.get('/api/users')
+			.expect(200)
+			.then(({ body: { users } }) => {
+				expect(users).toHaveLength(4);
+				users.forEach((user) => {
+					expect(user).toMatchObject({
+						username: expect.any(String),
+					});
+				});
+			});
+	});
+});
+
+describe('GET - /api/users/:username', () => {
+	test('status 200: returns an object of the following user that has the following username', () => {
+		return request(app)
+			.get('/api/users/bainesface')
+			.expect(200)
+			.then(({ body: { user } }) => {
+				expect(user).toMatchObject({
+					username: expect.any(String),
+					avatar_url: expect.any(String),
+					name: expect.any(String),
+				});
+			});
+	});
+	test('status 400: returns bad request if passed a username which is an invalid data type', () => {
+		return request(app)
+			.get('/api/users/90')
+			.expect(400)
+			.then(({ body: { msg } }) => {
+				expect(msg).toBe('Bad Request, Invalid username');
+			});
+	});
+});

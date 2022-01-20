@@ -1,16 +1,22 @@
-# Northcoders House of Games API
+# Khalids House of Games API
 
 ## Background
 
-We will be building an API for the purpose of accessing application data programmatically. The intention here is to mimick the building of a real world backend service (such as reddit) which should provide this information to the front end architecture.
+House Of Games is my first API (Application-Programming-Interface) i have created during my time at Northcoders, and its purpose is to supply information on games with reviews, categories, comments and users.
 
-Your database will be PSQL, and you will interact with it using [node-postgres](https://node-postgres.com/).
+As the games data was provided by Northcoders, these are the steps i followed to make this API:
+
+- PostgreSql & JavaScript: Creating and seeding the databases and connection to them.
+- MVC pattern
+- TDD: Using jest and supertest to test the applications functions thoroughly.
+- Error handling and handling incoming requests
+- Hosting Application with Heruko
 
 ## Step 1 - Setting up your project
 
 You will need to create _two_ `.env` files for your project: `.env.test` and `.env.development`. Into each, add `PGDATABASE=<database_name_here>`, with the correct database name for that environment (see `/db/setup.sql` for the database names). Double check that these `.env` files are .gitignored.
 
-You have also been provided with a `db` folder with some data, a [setup.sql](./db/setup.sql) file and  a `seeds` folder. You should also take a minute to familiarise yourself with the npm scripts you have been provided.
+You have also been provided with a `db` folder with some data, a [setup.sql](./db/setup.sql) file and a `seeds` folder. You should also take a minute to familiarise yourself with the npm scripts you have been provided.
 
 The job of `index.js` in each the data folders is to export out all the data from that folder, currently stored in separate files. This is so that, when you need access to the data elsewhere, you can write one convenient require statement - to the index file, rather than having to require each file individually. Think of it like a index of a book - a place to refer to! Make sure the index file exports an object with values of the data from that folder with the keys:
 
@@ -108,20 +114,20 @@ All of your endpoints should send the responses specified below in an **object**
 
 ```json
 {
-  "categories": [
-    {
-      "description": "Abstact games that involve little luck",
-      "slug": "Euro games"
-    },
-    {
-      "description": "Players attempt to uncover each other's hidden role",
-      "slug": "Social deduction"
-    },
-    {
-      "description": "Games involving physical skill",
-      "slug": "Dexterity"
-    }
-  ]
+	"categories": [
+		{
+			"description": "Abstact games that involve little luck",
+			"slug": "Euro games"
+		},
+		{
+			"description": "Players attempt to uncover each other's hidden role",
+			"slug": "Social deduction"
+		},
+		{
+			"description": "Games involving physical skill",
+			"slug": "Dexterity"
+		}
+	]
 }
 ```
 
@@ -354,8 +360,8 @@ Request body accepts:
 
 ```json
 {
-  "slug": "category name here",
-  "description": "description here"
+	"slug": "category name here",
+	"description": "description here"
 }
 ```
 
