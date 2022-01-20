@@ -57,8 +57,10 @@ exports.postComment = (req, res, next) => {
 	const { review_id } = req.params;
 	const { username } = req.body;
 	const { body } = req.body;
-	insertComment(review_id, username, body).then((comment) => {
-		console.log(comment);
-		res.status(201).send({ comment });
-	});
+	insertComment(review_id, username, body)
+		.then((comment) => {
+			console.log(comment);
+			res.status(201).send({ comment });
+		})
+		.catch(next);
 };

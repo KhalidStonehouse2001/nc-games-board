@@ -371,8 +371,77 @@ describe('POST /api/reviews/:review_id/comments', () => {
 			.expect(201)
 			.then(({ body: { comment } }) => {
 				expect(comment).toBeInstanceOf(Object);
-				expect(comment[0].author).toBe('bainesface');
-				expect(comment[0].body).toBe('My first comment');
+				expect(comment.author).toBe('bainesface');
+				expect(comment.body).toBe('My first comment');
+			});
+	});
+	test('status 200: ignores any other unwanted properties', () => {
+		return request(app)
+			.post('/api/reviews/2/comments')
+			.send({
+				username: 'bainesface',
+				body: 'Hellooo',
+				age: 90,
+			})
+			.expect(201)
+			.then(({ body: { comment } }) => {
+				expect(comment).toBeInstanceOf(Object);
+				expect(comment.author).toBe('bainesface');
+				expect(comment.body).toBe('Hellooo');
+				expect(comment).toMatchObject({
+					comment_id: expect.any(Number),
+					author: expect.any(String),
+					review_id: expect.any(Number),
+					votes: expect.any(Number),
+					created_at: expect.any(String),
+					body: expect.any(String),
+				});
+			});
+	});
+	test('status 400: returns bad request if passed a request with an empty body ', () => {
+		return request(app)
+			.post('/api/reviews/2/comments')
+			.send({
+				username: 'bainesface',
+			})
+			.expect(400)
+			.then(({ body: { msg } }) => {
+				expect(msg).toBe('Bad request, Incomplete body');
+			});
+	});
+	test('status 400: returns bad request if passed a request with empty username', () => {
+		return request(app)
+			.post('/api/reviews/2/comments')
+			.send({
+				body: 'hello',
+			})
+			.expect(400)
+			.then(({ body: { msg } }) => {
+				expect(msg).toBe('Bad request, Incomplete body');
+			});
+	});
+	test('status 404: returns page not found if passed an invalid path', () => {
+		return request(app)
+			.post('/api/reviewss/2/comments')
+			.send({
+				username: 'bainesface',
+				body: 'hello',
+			})
+			.expect(404)
+			.then(({ body: { msg } }) => {
+				expect(msg).toBe('Page Not Found');
+			});
+	});
+	test('status 400: returns not found if passed review_id that doesnt exist', () => {
+		return request(app)
+			.post('/api/reviews/9000/comments')
+			.send({
+				username: 'bainesface',
+				body: 'Hello again',
+			})
+			.expect(400)
+			.then(({ body: { msg } }) => {
+				expect(msg).toBe('Bad Request');
 			});
 	});
 });

@@ -41,6 +41,12 @@ exports.selectCommentsByReviewId = (id) => {
 };
 
 exports.insertComment = (id, name, body) => {
+	if (body === undefined || name === undefined) {
+		return Promise.reject({
+			status: 400,
+			msg: 'Bad request, Incomplete body',
+		});
+	}
 	return db
 		.query(
 			`
@@ -52,6 +58,6 @@ exports.insertComment = (id, name, body) => {
 			[id, body, name]
 		)
 		.then(({ rows }) => {
-			return rows;
+			return rows[0];
 		});
 };
