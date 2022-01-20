@@ -12,7 +12,9 @@ As the games data was provided by Northcoders, these are the steps i followed to
 - Error handling and handling incoming requests
 - Hosting Application with Heruko
 
-## Step 1 - Setting up your project
+## Try Out My API!
+
+You can access my API [HERE](https://khalids-games-board.herokuapp.com/api)
 
 You will need to create _two_ `.env` files for your project: `.env.test` and `.env.development`. Into each, add `PGDATABASE=<database_name_here>`, with the correct database name for that environment (see `/db/setup.sql` for the database names). Double check that these `.env` files are .gitignored.
 
