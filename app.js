@@ -18,7 +18,7 @@ const {
 	handle404s,
 	handlePsqlErrors,
 	handleCustomErrors,
-} = require('./error-handling/error');
+} = require('./Error-Handling/error');
 const { getApi } = require('./controllers/api.controllers');
 const app = express();
 
