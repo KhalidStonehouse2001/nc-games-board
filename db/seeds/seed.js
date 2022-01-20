@@ -18,7 +18,7 @@ const seed = (data) => {
 					})
 					.then(() => {
 						return db.query(`CREATE TABLE users
-          (username VARCHAR(200) NOT NULL PRIMARY KEY,
+          (username VARCHAR(63) NOT NULL PRIMARY KEY,
           avatar_url TEXT NOT NULL,
           name VARCHAR(200) NOT NULL)`);
 					})
@@ -37,7 +37,7 @@ const seed = (data) => {
 					.then(() => {
 						return db.query(`CREATE TABLE comments
           (comment_id SERIAL PRIMARY KEY,
-          author VARCHAR(200) REFERENCES users(username) ON DELETE CASCADE,
+          author VARCHAR(63) REFERENCES users(username),
           review_id INT REFERENCES reviews(review_id),
           votes INT DEFAULT 0,
           created_at TIMESTAMP,
@@ -108,8 +108,8 @@ const seed = (data) => {
 						);
 						return db.query(queryStr);
 					})
-					.then((res) => {
-						// console.log(res.rows.length);
+					.catch((err) => {
+						console.log(err);
 					})
 			);
 		});

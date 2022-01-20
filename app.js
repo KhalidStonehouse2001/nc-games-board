@@ -6,6 +6,7 @@ const {
 	getCommentById,
 	deleteComment,
 	getCommentsByReviewId,
+	postComment,
 } = require('./controllers/comments.controller');
 const {
 	getReviewByID,
@@ -31,6 +32,7 @@ app.get('/api/reviews/:review_id/comments', getCommentsByReviewId);
 app.get('/api/comments', getComments);
 app.get('/api/comments/:comment_id', getCommentById);
 app.delete('/api/comments/:comment_id', deleteComment);
+app.post('/api/reviews/:review_id/comments', postComment);
 app.all('*', handle404s);
 app.use(handlePsqlErrors);
 app.use(handleCustomErrors);

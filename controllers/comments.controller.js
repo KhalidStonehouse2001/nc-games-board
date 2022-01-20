@@ -3,13 +3,17 @@ const {
 	selectCommentById,
 	eraseComments,
 	selectCommentsByReviewId,
+	enterComment,
+	insertComment,
 } = require('../models/comments.model');
 const { checkIfIdExists } = require('../utils/utils');
 
 exports.getComments = (req, res, next) => {
-	selectComments().then((comments) => {
-		res.status(200).send({ comments });
-	});
+	selectComments()
+		.then((comments) => {
+			res.status(200).send({ comments });
+		})
+		.catch(next);
 };
 
 exports.getCommentById = (req, res, next) => {
@@ -32,7 +36,7 @@ exports.deleteComment = (req, res, next) => {
 	const { comment_id } = req.params;
 	eraseComments(comment_id)
 		.then((msg) => {
-			res.status(204).send();
+			res.status(204).end();
 		})
 		.catch(next);
 };
@@ -47,4 +51,11 @@ exports.getCommentsByReviewId = (req, res, next) => {
 			res.status(200).send({ comments });
 		})
 		.catch(next);
+};
+
+exports.postComment = (req, res, next) => {
+	const { review_id } = req.params;
+	const { username } = req.body;
+	const { body } = req.body;
+	insertComment(review_id, username, body);
 };
