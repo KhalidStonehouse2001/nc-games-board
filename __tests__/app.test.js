@@ -460,6 +460,14 @@ describe('GET - /api/users', () => {
 				});
 			});
 	});
+	test('status 404: returns page not found if passed an invalid url', () => {
+		return request(app)
+			.get('/api/usera')
+			.expect(404)
+			.then(({ body: { msg } }) => {
+				expect(msg).toBe('Page Not Found');
+			});
+	});
 });
 
 describe('GET - /api/users/:username', () => {
@@ -481,6 +489,14 @@ describe('GET - /api/users/:username', () => {
 			.expect(400)
 			.then(({ body: { msg } }) => {
 				expect(msg).toBe('Bad Request, Invalid username');
+			});
+	});
+	test('status 404: returns user doesnt exist if passed a username for a user what doesnt exist', () => {
+		return request(app)
+			.get('/api/users/notausername')
+			.expect(404)
+			.then(({ body: { msg } }) => {
+				expect(msg).toBe('User doesnt exist');
 			});
 	});
 });

@@ -31,4 +31,30 @@ exports.checkIfReviewExists = (id) => {
 		});
 };
 
-exports.checkIfUserExists = (username) => {};
+exports.checkIfUserExists = (username) => {
+	if (username === undefined) {
+		return Promise.reject({
+			status: 400,
+			msg: 'Bad request, incomplete body',
+		});
+	}
+	if (!isNaN(username)) {
+		return Promise.reject({
+			status: 400,
+			msg: 'Bad Request, Invalid username',
+		});
+	} else {
+		return db
+			.query(`SELECT * FROM users WHERE username = $1`, [username])
+			.then(({ rows }) => {
+				if (rows.length === 0) {
+					return Promise.reject({
+						status: 404,
+						msg: 'User doesnt exist',
+					});
+				} else {
+					return rows;
+				}
+			});
+	}
+};
