@@ -32,7 +32,7 @@ const seed = (data) => {
           votes INT DEFAULT 0,
           category VARCHAR(200) REFERENCES categories(slug),
           owner VARCHAR(200) NOT NULL REFERENCES users(username) ON DELETE CASCADE,
-          created_at TIMESTAMP)`);
+          created_at TIMESTAMP DEFAULT now())`);
 					})
 					.then(() => {
 						return db.query(`CREATE TABLE comments
@@ -40,7 +40,7 @@ const seed = (data) => {
           author VARCHAR(63) REFERENCES users(username),
           review_id INT REFERENCES reviews(review_id),
           votes INT DEFAULT 0,
-          created_at TIMESTAMP,
+          created_at TIMESTAMP DEFAULT now(),
           body TEXT NOT NULL)`);
 					})
 					// 2. insert data

@@ -365,14 +365,14 @@ describe('POST /api/reviews/:review_id/comments', () => {
 		return request(app)
 			.post('/api/reviews/2/comments')
 			.send({
-				username: 'Khalid123',
+				username: 'bainesface',
 				body: 'My first comment',
 			})
 			.expect(201)
 			.then(({ body: { comment } }) => {
 				expect(comment).toBeInstanceOf(Object);
-				expect(comment.username).toBe('Khalid123');
-				expect(comment.body).toBe('My first comment');
+				expect(comment[0].author).toBe('bainesface');
+				expect(comment[0].body).toBe('My first comment');
 			});
 	});
 });

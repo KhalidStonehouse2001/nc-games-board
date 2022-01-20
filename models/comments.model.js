@@ -52,6 +52,6 @@ exports.insertComment = (id, name, body) => {
 			[id, body, name]
 		)
 		.then(({ rows }) => {
-			console.log(rows);
+			return rows;
 		});
 };
