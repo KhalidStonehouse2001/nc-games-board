@@ -18,8 +18,15 @@ jobs:
       - name: checkout and clone repo
         uses: actions/checkout@v2
 
+      - name: setup postgres
+        uses: harmon758/postgresql-action@v1
+        with:
+          postgresql db: nc-games
+          postgresql user: khalid
+          postgresql password: hihacker
+
       - name: install dependencies
         run: npm i
 
       - name: test
-        run: npm t app
+        run: PGDATABASE=nc-games PGUSER=khalid PGPASSWORD=hihacker npm t
