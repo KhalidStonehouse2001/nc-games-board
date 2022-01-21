@@ -30,8 +30,8 @@ jobs:
 
       - name: Run tests
         run: PGDATABASE=nc_games_test PGUSER=test-user PGPASSWORD=testuserpassword npm t
-        
- deploy:
+
+  deploy:
     runs-on: ubuntu-latest
     needs: test
     steps:
