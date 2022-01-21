@@ -10,3 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo 'Hello There!'
+
+test:
+  name: Test
+  runs-on: ubuntu-latest
+  steps:
+    - name: Checkout
+      uses:
