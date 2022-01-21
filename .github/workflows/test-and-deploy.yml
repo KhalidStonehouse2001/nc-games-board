@@ -1,38 +1,32 @@
-name: Test & Deploy
+name: Test and Deploy
+
 on:
   push:
     branches:
       - main
 
 jobs:
-  greetings:
-    name: Greetings
+  greeting:
     runs-on: ubuntu-latest
     steps:
-      - run: echo 'Hello There!'
+      - name: intro
+        run: echo "This is the Test and Deploy script..."
 
-test:
-  name: Test
-  runs-on: ubuntu-latest
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v2.4.0
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout and clone repo
+        uses: actions/checkout@v2
 
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: 16
+      - name: setup postgres
+        uses: harmon758/postgresql-action@v1
+        with:
+          postgresql db: nc_games_test
+          postgresql user: test-user
+          postgresql password: testuserpassword
 
-    - name: Setup PostgreSQL
-      uses: Harmon758/postgresql-action@v1.0.0
-      with:
-        postgresql db: 'my_db'
-        postgresql user: 'test_user'
-        postgresql password: 'test_password'
+      - name: install dependencies
+        run: npm i
 
-      - name: Install dependencies
-        run: npm install
-
-      # RUN TESTS
-      - name: Run tests
-        run: PGDATABASE=my_db PGUSER=test_user PGPASSWORD=test_password npm t
+      - name: test the app (app.test.js)
+        run: PGDATABASE=nc_games_test PGUSER=test-user PGPASSWORD=testuserpassword npm t
