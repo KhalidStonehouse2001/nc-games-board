@@ -33,11 +33,18 @@ exports.eraseComments = (id) => {
 };
 
 exports.selectCommentsByReviewId = (id) => {
-	return db
-		.query(`SELECT * FROM comments WHERE review_id = $1`, [id])
-		.then(({ rows }) => {
-			return rows;
+	if (isNaN(id)) {
+		return Promise.reject({
+			status: 400,
+			msg: 'Bad request',
 		});
+	} else {
+		return db
+			.query(`SELECT * FROM comments WHERE review_id = $1`, [id])
+			.then(({ rows }) => {
+				return rows;
+			});
+	}
 };
 
 exports.insertComment = (id, name, body) => {

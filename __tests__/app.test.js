@@ -273,21 +273,21 @@ describe('GET /api/reviews/:review_id', () => {
 });
 
 describe('PATCH - /api/reviews/:review_id', () => {
-	test('status 201: returns the updated review with the votes incremented based on request', () => {
+	test('status 200: returns the updated review with the votes incremented based on request', () => {
 		return request(app)
 			.patch('/api/reviews/1')
 			.send({ inc_votes: 1 })
-			.expect(201)
+			.expect(200)
 			.then(({ body: { review } }) => {
 				expect(review).toBeInstanceOf(Object);
 				expect(review.votes).toBe(2);
 			});
 	});
-	test('status 201: returns the updated review when votes are decremented based on request', () => {
+	test('status 200: returns the updated review when votes are decremented based on request', () => {
 		return request(app)
 			.patch('/api/reviews/1')
 			.send({ inc_votes: -100 })
-			.expect(201)
+			.expect(200)
 			.then(({ body: { review } }) => {
 				expect(review).toBeInstanceOf(Object);
 				expect(review.votes).toBe(-99);
@@ -352,16 +352,16 @@ describe('GET - /api/reviews/:review_id/comments', () => {
 	});
 	test('status 400: returns bad request if passed an invalid id', () => {
 		return request(app)
-			.get('/api/reviedw')
-			.expect(404)
+			.get('/api/reviews/notanid/comments')
+			.expect(400)
 			.then(({ body: { msg } }) => {
-				expect(msg).toBe('Page Not Found');
+				expect(msg).toBe('Bad request');
 			});
 	});
 });
 
 describe('POST /api/reviews/:review_id/comments', () => {
-	test('status 200: returns newly inputted comment', () => {
+	test('status 201: returns newly inputted comment', () => {
 		return request(app)
 			.post('/api/reviews/2/comments')
 			.send({
@@ -375,7 +375,7 @@ describe('POST /api/reviews/:review_id/comments', () => {
 				expect(comment.body).toBe('My first comment');
 			});
 	});
-	test('status 200: ignores any other unwanted properties', () => {
+	test('status 201: ignores any other unwanted properties', () => {
 		return request(app)
 			.post('/api/reviews/2/comments')
 			.send({

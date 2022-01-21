@@ -43,9 +43,6 @@ exports.deleteComment = (req, res, next) => {
 
 exports.getCommentsByReviewId = (req, res, next) => {
 	const { review_id } = req.params;
-	if (isNaN(review_id)) {
-		res.status(400).send({ msg: 'Bad request' });
-	}
 	selectCommentsByReviewId(review_id)
 		.then((comments) => {
 			res.status(200).send({ comments });

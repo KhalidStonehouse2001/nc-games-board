@@ -2,6 +2,8 @@
 
 ## Background
 
+---
+
 House Of Games is my first API (Application-Programming-Interface) i have created during my time at Northcoders, and its purpose is to supply information on games with reviews, categories, comments and users.
 
 As the games data was provided by Northcoders, these are the steps i followed to make this API:
@@ -14,7 +16,21 @@ As the games data was provided by Northcoders, these are the steps i followed to
 
 ## Try Out My API!
 
+---
+
 You can access my API [HERE](https://khalids-games-board.herokuapp.com/api)
+
+> 1 - Fork this repository by clicking fork button in top corner.
+
+> 2 - Clone the forked reposistory down to your terminal
+
+```git
+git clone https://github.com/KhalidStonehouse2001/nc-games-board.git
+```
+
+## Requirements
+
+- Node.js v17.0.1.
 
 You will need to create _two_ `.env` files for your project: `.env.test` and `.env.development`. Into each, add `PGDATABASE=<database_name_here>`, with the correct database name for that environment (see `/db/setup.sql` for the database names). Double check that these `.env` files are .gitignored.
 
