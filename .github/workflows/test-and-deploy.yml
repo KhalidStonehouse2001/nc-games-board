@@ -21,7 +21,7 @@ jobs:
       - name: setup postgres
         uses: harmon758/postgresql-action@v1
         with:
-          postgresql db: nc_games
+          postgresql db: nc_games_test
           postgresql user: khalid
           postgresql password: hihacker
 
@@ -29,4 +29,4 @@ jobs:
         run: npm i
 
       - name: test
-        run: PGDATABASE=nc_games PGUSER=khalid PGPASSWORD=hihacker npm t
+        run: PGDATABASE=nc_games_test PGUSER=khalid PGPASSWORD=hihacker npm t
