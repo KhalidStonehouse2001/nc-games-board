@@ -1,32 +1,32 @@
-name: Test and Deploy
+# name: Test and Deploy
 
-on:
-  push:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
 
-jobs:
-  greeting:
-    runs-on: ubuntu-latest
-    steps:
-      - name: say Hello
-        run: echo 'Hello From CI'
+# jobs:
+#   greeting:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: say Hello
+#         run: echo 'Hello From CI'
 
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout and clone repo
-        uses: actions/checkout@v2
+#   test:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: checkout and clone repo
+#         uses: actions/checkout@v2
 
-      - name: setup postgres
-        uses: harmon758/postgresql-action@v1
-        with:
-          postgresql db: nc_games_test
-          postgresql user: khalid
-          postgresql password: hihacker
+#       - name: setup postgres
+#         uses: harmon758/postgresql-action@v1
+#         with:
+#           postgresql db: nc_games_test
+#           postgresql user: khalid
+#           postgresql password: hihacker
 
-      - name: install dependencies
-        run: npm i
+#       - name: install dependencies
+#         run: npm i
 
-      - name: test
-        run: PGDATABASE=nc_games_test PGUSER=khalid PGPASSWORD=hihacker npm t
+#       - name: test
+#         run: PGDATABASE=nc_games_test PGUSER=khalid PGPASSWORD=hihacker npm t
