@@ -108,7 +108,7 @@ const seed = (data) => {
 						);
 						return db.query(queryStr);
 					})
-					.catch(err)
+					.catch()
 			);
 		});
 	});
