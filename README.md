@@ -12,7 +12,7 @@ As the games data was provided by Northcoders, these are the steps i followed to
 - MVC pattern
 - TDD: Using jest and supertest to test the applications functions thoroughly.
 - Error handling and handling incoming requests
-- Hosting Application with Heruko
+- Hosting Application with Heroku
 
 ## Try Out My API!
 
